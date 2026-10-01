@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mücahit — Lesson 1: Framing Recommendations & Diplomatic Disagreement</title>
+<style>
+  :root{
+    --bg:#F7F2E9;
+    --panel:#FFFDF9;
+    --panel-alt:#F1EAD9;
+    --ink:#2B2924;
+    --ink-muted:#6E6A5F;
+    --border:#DCD3BE;
+    --copper:#B5652F;
+    --copper-dark:#8F4E24;
+    --emerald:#1F6E54;
+    --emerald-dark:#154D3B;
+    --red:#B8392E;
+    --green:#1F6E54;
+    --shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-weight:600;
+    letter-spacing:0.2px;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:32px 20px 80px;}
+  header.top{
+    border-bottom:1px solid var(--border);
+    padding-bottom:22px;
+    margin-bottom:22px;
+  }
+  header.top h1{font-size:1.6rem;margin:0 0 6px;color:var(--ink);}
+  header.top .subtitle{color:var(--ink-muted);font-size:0.98rem;margin:0 0 16px;}
+  .orientation{
+    background:var(--panel);
+    border-left:3px solid var(--copper);
+    padding:14px 18px;
+    border-radius:4px;
+    color:var(--ink-muted);
+    font-size:0.95rem;
+  }
+  .tabbar{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+    gap:10px;
+  }
+  .tab-btn{
+    flex:1;
+    padding:12px 18px;
+    border-radius:6px;
+    border:none;
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:600;
+    font-family:inherit;
+    transition:filter .15s ease;
+  }
+  .tab-btn.lesson{background:var(--copper);color:#FFFDF9;}
+  .tab-btn.homework{background:var(--emerald);color:#FFFDF9;}
+  .tab-btn:hover{filter:brightness(1.08);}
+  .tab-btn.inactive{opacity:0.45;}
+  .panel{display:none;margin-top:24px;}
+  .panel.active{display:block;}
+  .insight{
+    background:linear-gradient(135deg, rgba(193,122,78,0.12), rgba(46,131,104,0.10));
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:26px;
+  }
+  .insight .label{
+    text-transform:none;
+    font-size:0.8rem;
+    color:var(--copper);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .insight p{margin:0;color:var(--ink);font-size:0.97rem;}
+  .accordion{
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:14px;
+    overflow:hidden;
+    background:var(--panel);
+  }
+  .accordion-header{
+    padding:16px 20px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:1.05rem;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-weight:600;
+    color:var(--ink);
+    user-select:none;
+  }
+  .accordion-header:hover{background:var(--panel-alt);}
+  .accordion-header .chevron{
+    color:var(--ink-muted);
+    transition:transform .2s ease;
+    font-size:0.85rem;
+  }
+  .accordion.open .chevron{transform:rotate(90deg);}
+  .accordion-body{
+    display:none;
+    padding:4px 20px 22px;
+    border-top:1px solid var(--border);
+  }
+  .accordion.open .accordion-body{display:block;}
+  .q{
+    background:var(--panel-alt);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:14px 16px;
+    margin:14px 0;
+  }
+  .q p{margin:0 0 10px;}
+  .q label{display:block;margin:6px 0;cursor:pointer;}
+  input[type="text"], textarea{
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    color:var(--ink);
+    border-radius:4px;
+    padding:8px 10px;
+    font-size:0.95rem;
+    font-family:inherit;
+    width:100%;
+    max-width:420px;
+  }
+  textarea{max-width:100%;min-height:80px;resize:vertical;}
+  input[type="text"].correct{border-color:var(--green);box-shadow:0 0 0 1px var(--green);}
+  input[type="text"].incorrect{border-color:var(--red);box-shadow:0 0 0 1px var(--red);}
+  .check-btn, .reset-btn{
+    margin-top:8px;
+    padding:7px 14px;
+    border-radius:5px;
+    border:none;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    font-family:inherit;
+  }
+  .check-btn{background:var(--copper);color:#FFFDF9;}
+  .reset-btn{background:transparent;border:1px solid var(--border);color:var(--ink-muted);float:right;}
+  .check-btn:hover{filter:brightness(1.1);}
+  .feedback{display:block;margin-top:8px;font-size:0.88rem;font-weight:600;}
+  .feedback.correct{color:var(--green);}
+  .feedback.incorrect{color:var(--red);}
+  .reading-passage{
+    background:var(--panel-alt);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:16px 18px;
+    font-size:0.96rem;
+    color:var(--ink);
+    margin-bottom:18px;
+  }
+  .vocab-list{list-style:none;padding:0;margin:0 0 18px;}
+  .vocab-list li{
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .vocab-list li b{color:var(--copper);}
+  .section-note{color:var(--ink-muted);font-size:0.88rem;font-style:italic;margin-top:-4px;margin-bottom:16px;}
+  .go-hw-btn{
+    display:inline-block;
+    margin-bottom:18px;
+    padding:8px 16px;
+    background:var(--emerald);
+    color:#FFFDF9;
+    border-radius:5px;
+    font-weight:600;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:none;
+  }
+  .grammar-box{
+    background:var(--panel-alt);
+    border-left:3px solid var(--emerald);
+    padding:14px 18px;
+    border-radius:4px;
+    margin-bottom:18px;
+    font-size:0.95rem;
+  }
+  .grammar-box code{color:var(--copper);font-family:inherit;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Framing Recommendations & Diplomatic Disagreement</h1>
+    <p class="subtitle">Business English — Phase 1, Lesson 1 · Modals of Speculation & Hedging Language</p>
+    <div class="orientation">
+      This lesson focuses on softening strong opinions and disagreeing diplomatically with international
+      colleagues and clients — using modals of speculation (<em>might, could, may well</em>) and hedging phrases
+      (<em>I'd suggest, it might be worth, I wonder if</em>). The <strong>Lesson</strong> tab covers the grammar,
+      vocabulary, and in-session practice; the <strong>Homework</strong> tab reinforces it with a longer reading
+      passage and extra practice, including a writing + voice note task.
+    </div>
+    <div class="tabbar">
+      <button class="tab-btn lesson" onclick="showTab('lesson')">Lesson</button>
+      <button class="tab-btn homework inactive" onclick="showTab('homework')">Homework</button>
+    </div>
+  </header>
+
+  <!-- ===================== LESSON TAB ===================== -->
+  <div id="lesson" class="panel active">
+
+    <div class="insight">
+      <div class="label">Business Insight</div>
+      <p>In many international sales and client-facing roles, directness can be read as confidence in some
+      cultures and as rudeness in others. Managers who can soften a recommendation without weakening it —
+      "This approach might work better" instead of "Your approach is wrong" — build trust faster across
+      offices and close more deals with international clients.</p>
+    </div>
+
+    <button class="go-hw-btn" onclick="showTab('homework')">Go to Homework →</button>
+
+    <!-- SECTION 1: GRAMMAR -->
+    <div class="accordion open" id="l-sec1">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec1')">1. Grammar — Modals of Speculation & Hedging <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <div class="grammar-box">
+          <p><b>Modals of speculation</b> let you express how certain you are about something:</p>
+          <p><code>might / could / may</code> — possible, not certain ("This might delay the shipment.")<br>
+          <code>may well</code> — fairly likely ("The client may well ask for a discount.")<br>
+          <code>must</code> — near certain, based on evidence ("Sales must have dropped — the numbers are down.")<br>
+          <code>can't</code> — near certain something is not true ("That can't be right — check the invoice again.")</p>
+          <p><b>Hedging phrases</b> soften an opinion or recommendation: <code>I'd suggest…</code>,
+          <code>it might be worth…</code>, <code>perhaps we could…</code>, <code>I wonder if…</code>,
+          <code>it's possible that…</code>, <code>you may want to consider…</code>.</p>
+        </div>
+        <p class="section-note">Complete each sentence with the most appropriate modal or hedging phrase.</p>
+
+        <div class="q"><p>1. I <input type="text" class="blank" data-answers="think it might be worth|would suggest it might be worth|suggest it might be worth"> reviewing the contract terms before the call.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. The Dubai office <input type="text" class="blank" data-answers="may well|might well|could well"> raise concerns about the delivery timeline.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. <input type="text" class="blank" data-answers="perhaps we could|maybe we could"> reschedule the demo for next week instead.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. Sales figures dropped sharply, so there <input type="text" class="blank" data-answers="must be|must have been"> a problem with the new pricing.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. That figure <input type="text" class="blank" data-answers="can't be|cannot be"> correct — it's three times higher than last quarter.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. I <input type="text" class="blank" data-answers="wonder if|was wondering if"> the client would consider a phased rollout.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. It's <input type="text" class="blank" data-answers="possible that|likely that"> the distributor will ask for exclusive rights.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. You <input type="text" class="blank" data-answers="may want to consider|might want to consider"> a smaller initial order to reduce their risk.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. This delay <input type="text" class="blank" data-answers="might|could|may"> affect our Q3 targets if it isn't resolved soon.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. I'd <input type="text" class="blank" data-answers="suggest|recommend"> we follow up in writing after the call, just to confirm.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec1')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: VOCABULARY -->
+    <div class="accordion" id="l-sec2">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec2')">2. Vocabulary — Diplomacy & Negotiation Language <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <ul class="vocab-list">
+          <li><b>play devil's advocate</b> — argue the opposite side to test an idea</li>
+          <li><b>table an idea</b> — put an idea forward for discussion</li>
+          <li><b>push back</b> — resist or disagree with a proposal</li>
+          <li><b>find common ground</b> — identify shared interests between two sides</li>
+          <li><b>read between the lines</b> — understand a meaning that isn't stated directly</li>
+          <li><b>sugarcoat</b> — make bad news sound better than it is</li>
+          <li><b>tactful</b> — careful not to upset or offend someone</li>
+          <li><b>candid</b> — honest and direct, sometimes bluntly so</li>
+          <li><b>reservations</b> — doubts or concerns about a plan</li>
+          <li><b>reach a consensus</b> — arrive at general agreement among a group</li>
+        </ul>
+        <p class="section-note">Complete each sentence with the correct term from the list above.</p>
+        <div class="q"><p>1. Let's not <input type="text" class="blank" data-answers="sugarcoat"> it — the client is unhappy with the delay.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. I want to <input type="text" class="blank" data-answers="play devil's advocate|play devils advocate"> here — what if the competitor lowers their price first?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. The regional managers finally <input type="text" class="blank" data-answers="reached a consensus|reach a consensus"> on the new pricing structure.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. She was very <input type="text" class="blank" data-answers="candid"> about the reasons the deal fell through.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. I still have some <input type="text" class="blank" data-answers="reservations"> about launching in that market so quickly.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. He tends to <input type="text" class="blank" data-answers="push back"> whenever a new procedure is introduced.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. We need to <input type="text" class="blank" data-answers="find common ground"> before this negotiation goes any further.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. It's worth <input type="text" class="blank" data-answers="tabling the idea|tabling this idea"> at next week's regional meeting.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. Being <input type="text" class="blank" data-answers="tactful"> doesn't mean avoiding the issue — it means raising it the right way.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. If you <input type="text" class="blank" data-answers="read between the lines"> of his email, he's clearly not happy with the offer.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec2')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: PRACTICE A -->
+    <div class="accordion" id="l-sec3">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec3')">3. Practice A — Sentence Transformation <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Rewrite each blunt statement to make it more diplomatic, using a modal of speculation or hedging phrase. (Several answers are possible — a sample is checked here.)</p>
+        <div class="q"><p>1. "Your proposal is wrong." → <textarea class="ta" data-keywords="might|could|perhaps|suggest|consider"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. "We can't meet that deadline." → <textarea class="ta" data-keywords="might|could|may|challenging|difficult"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. "That price is too high." → <textarea class="ta" data-keywords="might|could|wonder|reconsider|consider"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. "You made a mistake in the report." → <textarea class="ta" data-keywords="might|could|perhaps|worth checking|double-check"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. "This plan won't work." → <textarea class="ta" data-keywords="might|could|concerned|not sure|worth reconsidering"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. "I disagree with your approach." → <textarea class="ta" data-keywords="might|could|see it differently|another way|perhaps"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. "The client will say no." → <textarea class="ta" data-keywords="might|may well|could|possible"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. "This is a bad idea." → <textarea class="ta" data-keywords="might|could|concerned|not entirely sure|reservations"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. "We need more budget, end of discussion." → <textarea class="ta" data-keywords="might|could|suggest|worth discussing|consider"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. "Your team missed the target again." → <textarea class="ta" data-keywords="might|could|seems|it looks like|worth looking into"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec3')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: PRACTICE B -->
+    <div class="accordion" id="l-sec4">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec4')">4. Practice B — Error Correction <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Each sentence has one grammar or register error. Type the corrected sentence.</p>
+        <div class="q"><p>1. This might to delay the shipment by a week.</p><textarea class="ta" data-keywords="might delay"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. I suggest that we should to reconsider the offer.</p><textarea class="ta" data-keywords="suggest that we reconsider|suggest we reconsider"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. It possible that the client will ask for a discount.</p><textarea class="ta" data-keywords="it's possible|it is possible"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. The numbers must to be wrong, they don't match the invoice.</p><textarea class="ta" data-keywords="must be wrong"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. Perhaps we can to move the meeting to Thursday.</p><textarea class="ta" data-keywords="perhaps we can move"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. I'm wondering if the distributor would considering a smaller order.</p><textarea class="ta" data-keywords="wondering if the distributor would consider"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. You may want considering a phased rollout instead.</p><textarea class="ta" data-keywords="may want to consider"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. This can't to be right, the total is too high.</p><textarea class="ta" data-keywords="can't be right|cannot be right"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. It might be worth to check the contract again.</p><textarea class="ta" data-keywords="worth checking"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. The team may well to miss the deadline this time.</p><textarea class="ta" data-keywords="may well miss"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec4')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: PRACTICE C -->
+    <div class="accordion" id="l-sec5">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec5')">5. Practice C — Multiple Choice: The Diplomatic Response <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Choose the most diplomatic response for each situation.</p>
+
+        <div class="q" data-correct="b"><p>1. A colleague's plan has an obvious flaw. You say:</p>
+        <label><input type="radio" name="mc1" value="a"> "Your plan is wrong."</label>
+        <label><input type="radio" name="mc1" value="b"> "I wonder if we've considered what happens if demand drops."</label>
+        <label><input type="radio" name="mc1" value="c"> "That won't work at all."</label>
+        <label><input type="radio" name="mc1" value="d"> "No, that's not right."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>2. The international office missed a deadline. You want to raise it without blame:</p>
+        <label><input type="radio" name="mc2" value="a"> "You missed the deadline again."</label>
+        <label><input type="radio" name="mc2" value="b"> "This is unacceptable."</label>
+        <label><input type="radio" name="mc2" value="c"> "It looks like the deadline slipped — could we look at what caused the delay?"</label>
+        <label><input type="radio" name="mc2" value="d"> "Why didn't you finish on time?"</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. You disagree with a client's pricing request:</p>
+        <label><input type="radio" name="mc3" value="a"> "I understand your position — perhaps we could look at a middle ground."</label>
+        <label><input type="radio" name="mc3" value="b"> "That price is impossible."</label>
+        <label><input type="radio" name="mc3" value="c"> "You're asking for too much."</label>
+        <label><input type="radio" name="mc3" value="d"> "We won't do that."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>4. You need to point out a report error to a senior colleague:</p>
+        <label><input type="radio" name="mc4" value="a"> "This report is full of mistakes."</label>
+        <label><input type="radio" name="mc4" value="b"> "You clearly didn't check this."</label>
+        <label><input type="radio" name="mc4" value="c"> "This is wrong."</label>
+        <label><input type="radio" name="mc4" value="d"> "It might be worth double-checking the figures in section 3."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>5. A teammate suggests an idea you have concerns about:</p>
+        <label><input type="radio" name="mc5" value="a"> "That won't work."</label>
+        <label><input type="radio" name="mc5" value="b"> "I like parts of it, though I do have a few reservations — can I share them?"</label>
+        <label><input type="radio" name="mc5" value="c"> "I don't think so."</label>
+        <label><input type="radio" name="mc5" value="d"> "Bad idea."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>6. You want to challenge an assumption in a meeting without seeming confrontational:</p>
+        <label><input type="radio" name="mc6" value="a"> "That's not true."</label>
+        <label><input type="radio" name="mc6" value="b"> "You're mistaken."</label>
+        <label><input type="radio" name="mc6" value="c"> "Can I play devil's advocate for a moment?"</label>
+        <label><input type="radio" name="mc6" value="d"> "I completely disagree."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. You need to deliver bad news about a delay to a client:</p>
+        <label><input type="radio" name="mc7" value="a"> "I'd like to flag a possible delay so we can plan around it together."</label>
+        <label><input type="radio" name="mc7" value="b"> "It's going to be late."</label>
+        <label><input type="radio" name="mc7" value="c"> "There's nothing we can do about the delay."</label>
+        <label><input type="radio" name="mc7" value="d"> "Don't expect it on time."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>8. A junior colleague pushes back on your instructions. You respond:</p>
+        <label><input type="radio" name="mc8" value="a"> "Just do what I said."</label>
+        <label><input type="radio" name="mc8" value="b"> "That's not your decision."</label>
+        <label><input type="radio" name="mc8" value="c"> "I'm not interested in your opinion."</label>
+        <label><input type="radio" name="mc8" value="d"> "That's a fair point — let's find a way that works for both concerns."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>9. You suspect a number in a report is wrong:</p>
+        <label><input type="radio" name="mc9" value="a"> "This number is definitely wrong."</label>
+        <label><input type="radio" name="mc9" value="b"> "This figure looks off — could we double-check it?"</label>
+        <label><input type="radio" name="mc9" value="c"> "Someone made an error here."</label>
+        <label><input type="radio" name="mc9" value="d"> "This can't be used."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>10. You want to propose an alternative to a plan already agreed upon:</p>
+        <label><input type="radio" name="mc10" value="a"> "This plan is bad, we should change it."</label>
+        <label><input type="radio" name="mc10" value="b"> "I don't agree with this at all."</label>
+        <label><input type="radio" name="mc10" value="c"> "Would it be worth considering an alternative approach here?"</label>
+        <label><input type="radio" name="mc10" value="d"> "This isn't going to work, trust me."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('l-sec5')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 6: READING & DISCUSSION -->
+    <div class="accordion" id="l-sec6">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec6')">6. Reading & Discussion <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <div class="reading-passage">
+          <p>Last month, the İstanbul sales team proposed extending payment terms for a large distributor in the
+          Gulf region. The finance team in the head office pushed back, citing cash flow concerns. Rather than
+          insisting the finance team was wrong, the sales manager suggested a phased compromise: a shorter
+          extension for the first order, with a full 90-day term unlocked once the distributor's payment history
+          proved reliable. The finance team appreciated being consulted rather than overridden, and the
+          distributor accepted the phased offer without further negotiation. The deal closed within a week —
+          faster than either side expected.</p>
+        </div>
+        <p class="section-note">Mark each statement as True (T), False (F), or Not Given (NG).</p>
+
+        <div class="q" data-correct="a"><p>1. The proposal involved extending payment terms for a Gulf-region distributor.</p>
+        <label><input type="radio" name="r1" value="a"> True</label><label><input type="radio" name="r1" value="b"> False</label><label><input type="radio" name="r1" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>2. The finance team immediately agreed to the original proposal.</p>
+        <label><input type="radio" name="r2" value="a"> True</label><label><input type="radio" name="r2" value="b"> False</label><label><input type="radio" name="r2" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. The sales manager offered a phased compromise instead of insisting he was right.</p>
+        <label><input type="radio" name="r3" value="a"> True</label><label><input type="radio" name="r3" value="b"> False</label><label><input type="radio" name="r3" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>4. The distributor had worked with the company for over five years.</p>
+        <label><input type="radio" name="r4" value="a"> True</label><label><input type="radio" name="r4" value="b"> False</label><label><input type="radio" name="r4" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>5. The full 90-day term was granted immediately.</p>
+        <label><input type="radio" name="r5" value="a"> True</label><label><input type="radio" name="r5" value="b"> False</label><label><input type="radio" name="r5" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>6. The finance team appreciated being consulted.</p>
+        <label><input type="radio" name="r6" value="a"> True</label><label><input type="radio" name="r6" value="b"> False</label><label><input type="radio" name="r6" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. The deal closed within a week.</p>
+        <label><input type="radio" name="r7" value="a"> True</label><label><input type="radio" name="r7" value="b"> False</label><label><input type="radio" name="r7" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>8. The distributor rejected the phased offer at first.</p>
+        <label><input type="radio" name="r8" value="a"> True</label><label><input type="radio" name="r8" value="b"> False</label><label><input type="radio" name="r8" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>9. The finance team was based in the same office as the sales team.</p>
+        <label><input type="radio" name="r9" value="a"> True</label><label><input type="radio" name="r9" value="b"> False</label><label><input type="radio" name="r9" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>10. Payment history would determine when the full term applied.</p>
+        <label><input type="radio" name="r10" value="a"> True</label><label><input type="radio" name="r10" value="b"> False</label><label><input type="radio" name="r10" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('l-sec6')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 7: SPEAKING -->
+    <div class="accordion" id="l-sec7">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec7')">7. Speaking <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Discuss these in the lesson, using at least one modal of speculation or hedging phrase in each answer.</p>
+        <ol>
+          <li>Describe a time you had to disagree with a colleague or client diplomatically. What did you say?</li>
+          <li>How do communication styles differ between your İstanbul office and the international offices you work with?</li>
+          <li>What's a recommendation you'd like to make to your team, but haven't yet? How could you frame it diplomatically?</li>
+          <li>How do you usually deliver bad news (a delay, a price increase) to a client?</li>
+          <li>What phrase from today's lesson do you think you'll use most this week, and why?</li>
+          <li>Tell me about a negotiation where finding common ground helped close the deal.</li>
+          <li>How would you push back on a request from a senior manager without seeming disrespectful?</li>
+          <li>What's the difference between being tactful and avoiding a difficult conversation altogether?</li>
+          <li>Describe a situation where you had to read between the lines of an email or message.</li>
+          <li>If a client's expectations are unrealistic, how do you address that diplomatically?</li>
+        </ol>
+        <button class="reset-btn" onclick="resetSection('l-sec7')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 8: WRAP-UP -->
+    <div class="accordion" id="l-sec8">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec8')">8. Wrap-Up & Free Writing <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Quick recap — choose the correct option.</p>
+        <div class="q" data-correct="a"><p>1. Which modal expresses near-certainty based on evidence?</p>
+        <label><input type="radio" name="w1" value="a"> must</label><label><input type="radio" name="w1" value="b"> might</label><label><input type="radio" name="w1" value="c"> could</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>2. Which phrase softens a recommendation?</p>
+        <label><input type="radio" name="w2" value="a"> You must do this.</label><label><input type="radio" name="w2" value="b"> It might be worth considering...</label><label><input type="radio" name="w2" value="c"> Do it now.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>3. "Push back" means:</p>
+        <label><input type="radio" name="w3" value="a"> agree quickly</label><label><input type="radio" name="w3" value="b"> stay silent</label><label><input type="radio" name="w3" value="c"> resist or disagree</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>4. "Reservations" in a business context means:</p>
+        <label><input type="radio" name="w4" value="a"> doubts or concerns</label><label><input type="radio" name="w4" value="b"> hotel bookings</label><label><input type="radio" name="w4" value="c"> strong agreement</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>5. "May well" expresses:</p>
+        <label><input type="radio" name="w5" value="a"> total certainty</label><label><input type="radio" name="w5" value="b"> fairly likely possibility</label><label><input type="radio" name="w5" value="c"> impossibility</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>6. "Sugarcoat" means:</p>
+        <label><input type="radio" name="w6" value="a"> to add sugar</label><label><input type="radio" name="w6" value="b"> to be very direct</label><label><input type="radio" name="w6" value="c"> to make bad news sound better</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. "I wonder if..." is used to:</p>
+        <label><input type="radio" name="w7" value="a"> make a gentle suggestion</label><label><input type="radio" name="w7" value="b"> give a direct order</label><label><input type="radio" name="w7" value="c"> express anger</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>8. "Reach a consensus" means:</p>
+        <label><input type="radio" name="w8" value="a"> to disagree strongly</label><label><input type="radio" name="w8" value="b"> to arrive at general agreement</label><label><input type="radio" name="w8" value="c"> to end a meeting early</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>9. Which is the most diplomatic way to point out an error?</p>
+        <label><input type="radio" name="w9" value="a"> "You're wrong."</label><label><input type="radio" name="w9" value="b"> "This is a mistake."</label><label><input type="radio" name="w9" value="c"> "This might need a second look."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>10. "Can't be" is used to express:</p>
+        <label><input type="radio" name="w10" value="a"> near-certainty that something is false</label><label><input type="radio" name="w10" value="b"> strong agreement</label><label><input type="radio" name="w10" value="c"> a polite request</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <p class="section-note" style="margin-top:20px;">Free writing: Describe a recent situation at work where you had to disagree with someone diplomatically. Use at least three phrases from today's lesson.</p>
+        <textarea class="ta" data-keywords="might|could|suggest|perhaps|wonder|consider" style="min-height:120px;"></textarea>
+        <button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span>
+        <button class="reset-btn" onclick="resetSection('l-sec8')">Reset</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== HOMEWORK TAB ===================== -->
+  <div id="homework" class="panel">
+
+    <!-- SECTION 1: GRAMMAR -->
+    <div class="accordion open" id="h-sec1">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec1')">1. Grammar — Modals of Speculation & Hedging <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">More practice with modals of speculation and hedging phrases.</p>
+        <div class="q"><p>1. The board <input type="text" class="blank" data-answers="might|could|may"> reject the proposal if costs aren't reduced.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. I <input type="text" class="blank" data-answers="would suggest|suggest"> we wait for the audit results before deciding.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. That report <input type="text" class="blank" data-answers="must be|must have been"> outdated — the figures don't match this month's data.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. It <input type="text" class="blank" data-answers="might be worth|could be worth"> speaking to legal before we sign.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. The competitor <input type="text" class="blank" data-answers="may well|might well|could well"> lower their prices next quarter.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. <input type="text" class="blank" data-answers="perhaps we could|maybe we could"> offer a trial period instead of a full commitment.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. That <input type="text" class="blank" data-answers="can't be|cannot be"> the final offer — they always start high.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. I <input type="text" class="blank" data-answers="wonder if|was wondering if"> the delay is connected to the supplier issue.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. You <input type="text" class="blank" data-answers="may want to consider|might want to consider"> looping in the regional director on this.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. It's <input type="text" class="blank" data-answers="possible that|likely that"> the client simply misunderstood the terms.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec1')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: VOCABULARY -->
+    <div class="accordion" id="h-sec2">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec2')">2. Vocabulary — Diplomacy & Negotiation Language <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Use each term from Lesson Section 2 in the correct sentence.</p>
+        <div class="q"><p>1. The two sides finally <input type="text" class="blank" data-answers="found common ground"> after a long negotiation.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. He's known for being <input type="text" class="blank" data-answers="candid"> in performance reviews, sometimes too much so.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. Let's <input type="text" class="blank" data-answers="table this idea|table the idea"> at the next steering committee meeting.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. I don't want to <input type="text" class="blank" data-answers="sugarcoat"> this — the launch has been delayed by a month.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. The junior rep decided to <input type="text" class="blank" data-answers="push back"> on the unrealistic quota.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. I have a few <input type="text" class="blank" data-answers="reservations"> about entering that market this year.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. Try to <input type="text" class="blank" data-answers="read between the lines"> — the client's silence usually means hesitation.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. It's important to stay <input type="text" class="blank" data-answers="tactful"> even when clients are frustrated.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. She likes to <input type="text" class="blank" data-answers="play devil's advocate|play devils advocate"> to stress-test every new strategy.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. The committee needed two meetings to <input type="text" class="blank" data-answers="reach a consensus|reach consensus"> on the budget.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec2')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: PRACTICE A -->
+    <div class="accordion" id="h-sec3">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec3')">3. Practice A — Sentence Transformation <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Rewrite each direct statement diplomatically.</p>
+        <div class="q"><p>1. "Your numbers are wrong." → <textarea class="ta" data-keywords="might|could|worth checking|double-check"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. "We won't extend the deadline." → <textarea class="ta" data-keywords="might|could|difficult|challenging"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. "That's a bad strategy." → <textarea class="ta" data-keywords="might|could|reservations|not entirely sure"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. "You should have called me first." → <textarea class="ta" data-keywords="might|could|perhaps|next time"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. "The client is being unreasonable." → <textarea class="ta" data-keywords="might|could|seems|possible"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. "This report is incomplete." → <textarea class="ta" data-keywords="might|could|worth adding|perhaps"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. "I don't trust that supplier." → <textarea class="ta" data-keywords="might|could|reservations|concerned"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. "Your presentation was too long." → <textarea class="ta" data-keywords="might|could|worth shortening|consider"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. "We need to cut the budget now." → <textarea class="ta" data-keywords="might|could|suggest|worth considering"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. "That timeline is unrealistic." → <textarea class="ta" data-keywords="might|could|wonder|tight|challenging"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec3')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: PRACTICE B -->
+    <div class="accordion" id="h-sec4">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec4')">4. Practice B — Error Correction <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Correct the error in each sentence.</p>
+        <div class="q"><p>1. It might to be a good idea to double-check the invoice.</p><textarea class="ta" data-keywords="might be a good idea"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. I suggest to reschedule the call for Friday.</p><textarea class="ta" data-keywords="suggest rescheduling|suggest we reschedule"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. The client could to ask for a longer trial period.</p><textarea class="ta" data-keywords="could ask"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. This must to be an error in the shipping calculation.</p><textarea class="ta" data-keywords="must be an error"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. Maybe we can to offer a discount for early payment.</p><textarea class="ta" data-keywords="maybe we can offer"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. I'm not sure if the office is understanding our position.</p><textarea class="ta" data-keywords="understands our position"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. It's possible the distributor is wanting exclusivity.</p><textarea class="ta" data-keywords="wants exclusivity"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. You may want to considering a smaller pilot first.</p><textarea class="ta" data-keywords="may want to consider"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. This can't to be the correct exchange rate.</p><textarea class="ta" data-keywords="can't be the correct|cannot be the correct"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. Perhaps the team should to revisit the pricing model.</p><textarea class="ta" data-keywords="team should revisit"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec4')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: PRACTICE C -->
+    <div class="accordion" id="h-sec5">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec5')">5. Practice C — Multiple Choice: The Diplomatic Response <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Choose the most diplomatic response.</p>
+
+        <div class="q" data-correct="b"><p>1. A supplier keeps missing quality standards. You say:</p>
+        <label><input type="radio" name="hm1" value="a"> "Your quality is unacceptable."</label>
+        <label><input type="radio" name="hm1" value="b"> "We've noticed some inconsistency lately — could we discuss what's changed?"</label>
+        <label><input type="radio" name="hm1" value="c"> "Fix this now."</label>
+        <label><input type="radio" name="hm1" value="d"> "We're not happy at all."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>2. You disagree with your manager's plan in a meeting:</p>
+        <label><input type="radio" name="hm2" value="a"> "I completely disagree."</label>
+        <label><input type="radio" name="hm2" value="b"> "That's wrong."</label>
+        <label><input type="radio" name="hm2" value="c"> "That's a fair point — could I offer another perspective?"</label>
+        <label><input type="radio" name="hm2" value="d"> "No, let's not do that."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. You want to question a decision made by another department:</p>
+        <label><input type="radio" name="hm3" value="a"> "I'm curious what led to this decision — could you walk me through it?"</label>
+        <label><input type="radio" name="hm3" value="b"> "This decision makes no sense."</label>
+        <label><input type="radio" name="hm3" value="c"> "Who approved this?"</label>
+        <label><input type="radio" name="hm3" value="d"> "This is a mistake."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>4. A colleague's email came across as blunt. You reply:</p>
+        <label><input type="radio" name="hm4" value="a"> "Your email was rude."</label>
+        <label><input type="radio" name="hm4" value="b"> "That tone wasn't necessary."</label>
+        <label><input type="radio" name="hm4" value="c"> "I didn't appreciate that."</label>
+        <label><input type="radio" name="hm4" value="d"> "Thanks for the update — I might have understood a couple of points differently, could we hop on a call?"</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>5. You need to tell a client their expectations aren't realistic:</p>
+        <label><input type="radio" name="hm5" value="a"> "That's not possible."</label>
+        <label><input type="radio" name="hm5" value="b"> "That timeline could be tight — let's look at what's achievable together."</label>
+        <label><input type="radio" name="hm5" value="c"> "You're asking for too much."</label>
+        <label><input type="radio" name="hm5" value="d"> "We can't do that."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>6. Your idea was rejected. You want to reintroduce it later:</p>
+        <label><input type="radio" name="hm6" value="a"> "You were wrong to reject it."</label>
+        <label><input type="radio" name="hm6" value="b"> "I still think I was right."</label>
+        <label><input type="radio" name="hm6" value="c"> "Could we revisit this idea once we have more data?"</label>
+        <label><input type="radio" name="hm6" value="d"> "This will come back eventually."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. A regional office isn't following the agreed process:</p>
+        <label><input type="radio" name="hm7" value="a"> "I've noticed a few steps are being skipped — could we align on the process again?"</label>
+        <label><input type="radio" name="hm7" value="b"> "You're not following the process."</label>
+        <label><input type="radio" name="hm7" value="c"> "This needs to stop."</label>
+        <label><input type="radio" name="hm7" value="d"> "Why aren't you following the rules?"</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>8. You think a proposed budget is too low:</p>
+        <label><input type="radio" name="hm8" value="a"> "This budget is too small."</label>
+        <label><input type="radio" name="hm8" value="b"> "That won't be enough."</label>
+        <label><input type="radio" name="hm8" value="c"> "We need more money."</label>
+        <label><input type="radio" name="hm8" value="d"> "This might be tight — could we walk through the assumptions together?"</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>9. You want to raise a concern about a new hire's performance:</p>
+        <label><input type="radio" name="hm9" value="a"> "He's not performing well."</label>
+        <label><input type="radio" name="hm9" value="b"> "I've noticed a few areas that might benefit from extra support."</label>
+        <label><input type="radio" name="hm9" value="c"> "He's struggling."</label>
+        <label><input type="radio" name="hm9" value="d"> "This isn't working out."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>10. You want to suggest changing a long-standing company process:</p>
+        <label><input type="radio" name="hm10" value="a"> "This process is outdated."</label>
+        <label><input type="radio" name="hm10" value="b"> "We need to change this now."</label>
+        <label><input type="radio" name="hm10" value="c"> "It might be worth reviewing whether this process still serves us well."</label>
+        <label><input type="radio" name="hm10" value="d"> "Nobody likes this process."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('h-sec5')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 6: READING & DISCUSSION -->
+    <div class="accordion" id="h-sec6">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec6')">6. Reading & Discussion <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <div class="reading-passage">
+          <p>When the İstanbul sales team began working more closely with the company's new office in Dubai,
+          early calls were tense. The İstanbul team was used to a direct style — raising problems plainly and
+          expecting quick decisions. The Dubai team, working with clients across several Gulf countries, tended
+          to build relationships slowly and preferred indirect, carefully hedged language, especially when
+          disagreeing. Several early misunderstandings arose: a direct comment from İstanbul about a delayed
+          shipment was interpreted as an accusation, while a softly-worded concern from Dubai about pricing was
+          initially missed altogether because it didn't sound urgent enough. After a joint training session on
+          cross-cultural communication, both teams agreed on a shared approach: raise concerns early, but frame
+          them with hedging language such as "it might be worth" or "I wonder if," and always follow up
+          important points in writing to avoid ambiguity. Within two months, the number of miscommunications
+          dropped sharply, and the two offices began closing joint deals with international distributors far
+          more smoothly. The sales manager overseeing both teams noted that the biggest shift wasn't in language
+          ability at all — it was in learning to read intent behind tone, and in trusting that a softly-phrased
+          concern from a colleague could be just as serious as a direct one. Team members began checking in
+          with each other more often outside of formal calls, which also helped build the kind of trust that
+          made future disagreements easier to raise without tension.</p>
+        </div>
+        <p class="section-note">Mark each statement as True (T), False (F), or Not Given (NG).</p>
+
+        <div class="q" data-correct="a"><p>1. The İstanbul team was used to a direct communication style.</p>
+        <label><input type="radio" name="hr1" value="a"> True</label><label><input type="radio" name="hr1" value="b"> False</label><label><input type="radio" name="hr1" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>2. The Dubai team preferred very direct language when disagreeing.</p>
+        <label><input type="radio" name="hr2" value="a"> True</label><label><input type="radio" name="hr2" value="b"> False</label><label><input type="radio" name="hr2" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. A direct comment about a delayed shipment was interpreted as an accusation.</p>
+        <label><input type="radio" name="hr3" value="a"> True</label><label><input type="radio" name="hr3" value="b"> False</label><label><input type="radio" name="hr3" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>4. Dubai's concern about pricing was noticed immediately.</p>
+        <label><input type="radio" name="hr4" value="a"> True</label><label><input type="radio" name="hr4" value="b"> False</label><label><input type="radio" name="hr4" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>5. The joint training session lasted three full days.</p>
+        <label><input type="radio" name="hr5" value="a"> True</label><label><input type="radio" name="hr5" value="b"> False</label><label><input type="radio" name="hr5" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>6. Both teams agreed to follow up important points in writing.</p>
+        <label><input type="radio" name="hr6" value="a"> True</label><label><input type="radio" name="hr6" value="b"> False</label><label><input type="radio" name="hr6" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. Miscommunications dropped sharply within two months.</p>
+        <label><input type="radio" name="hr7" value="a"> True</label><label><input type="radio" name="hr7" value="b"> False</label><label><input type="radio" name="hr7" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>8. The sales manager said the biggest shift was in language ability.</p>
+        <label><input type="radio" name="hr8" value="a"> True</label><label><input type="radio" name="hr8" value="b"> False</label><label><input type="radio" name="hr8" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>9. The Dubai office had more staff than the İstanbul office.</p>
+        <label><input type="radio" name="hr9" value="a"> True</label><label><input type="radio" name="hr9" value="b"> False</label><label><input type="radio" name="hr9" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>10. Team members began checking in with each other more often outside formal calls.</p>
+        <label><input type="radio" name="hr10" value="a"> True</label><label><input type="radio" name="hr10" value="b"> False</label><label><input type="radio" name="hr10" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('h-sec6')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 7: SPEAKING / WRITING + VOICE NOTE -->
+    <div class="accordion" id="h-sec7">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec7')">7. Speaking <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Write short answers first, then record a voice note (e.g. via WhatsApp) explaining what you wrote, in your own words, using at least one modal of speculation or hedging phrase per answer.</p>
+        <ol>
+          <li>Describe a cross-cultural misunderstanding you've experienced at work, similar to the one in the reading.</li>
+          <li>What hedging phrase do you personally find hardest to use naturally, and why?</li>
+          <li>How would you raise a concern with a colleague from a much more indirect communication culture?</li>
+          <li>Tell me about a time a softly-worded message was more effective than a direct one.</li>
+          <li>What's one process at your company you think might be worth reviewing?</li>
+          <li>How do you build trust with an international office you rarely meet in person?</li>
+          <li>Describe how you'd diplomatically push back on an unrealistic client deadline.</li>
+          <li>What's the risk of being too indirect in a business negotiation?</li>
+          <li>How has your communication style changed since working with international colleagues?</li>
+          <li>Give an example of finding common ground in a recent disagreement.</li>
+        </ol>
+        <button class="reset-btn" onclick="resetSection('h-sec7')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 8: WRAP-UP / FREE WRITING -->
+    <div class="accordion" id="h-sec8">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec8')">8. Wrap-Up & Free Writing <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Quick review — choose the correct option.</p>
+        <div class="q" data-correct="b"><p>1. Which is a hedging phrase?</p>
+        <label><input type="radio" name="hw1" value="a"> You must.</label><label><input type="radio" name="hw1" value="b"> It might be worth...</label><label><input type="radio" name="hw1" value="c"> Do it.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>2. "Reach a consensus" means:</p>
+        <label><input type="radio" name="hw2" value="a"> arrive at general agreement</label><label><input type="radio" name="hw2" value="b"> strongly disagree</label><label><input type="radio" name="hw2" value="c"> end a discussion</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>3. Which modal shows near-certainty that something is false?</p>
+        <label><input type="radio" name="hw3" value="a"> might</label><label><input type="radio" name="hw3" value="b"> could</label><label><input type="radio" name="hw3" value="c"> can't</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>4. "Read between the lines" means:</p>
+        <label><input type="radio" name="hw4" value="a"> read very carefully word by word</label><label><input type="radio" name="hw4" value="b"> understand an unstated meaning</label><label><input type="radio" name="hw4" value="c"> skip unimportant parts</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>5. Which sentence is most diplomatic?</p>
+        <label><input type="radio" name="hw5" value="a"> "This might need another look."</label><label><input type="radio" name="hw5" value="b"> "This is wrong."</label><label><input type="radio" name="hw5" value="c"> "Fix this."</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>6. "Push back" means:</p>
+        <label><input type="radio" name="hw6" value="a"> to fully accept</label><label><input type="radio" name="hw6" value="b"> to stay quiet</label><label><input type="radio" name="hw6" value="c"> to resist or disagree</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>7. "May well" expresses:</p>
+        <label><input type="radio" name="hw7" value="a"> total impossibility</label><label><input type="radio" name="hw7" value="b"> fairly likely possibility</label><label><input type="radio" name="hw7" value="c"> a direct order</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>8. "Reservations" means:</p>
+        <label><input type="radio" name="hw8" value="a"> doubts or concerns</label><label><input type="radio" name="hw8" value="b"> strong support</label><label><input type="radio" name="hw8" value="c"> a booking</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>9. Why use hedging language in international business?</p>
+        <label><input type="radio" name="hw9" value="a"> To hide the truth</label><label><input type="radio" name="hw9" value="b"> To sound less confident</label><label><input type="radio" name="hw9" value="c"> To soften disagreement and build trust across cultures</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>10. "Sugarcoat" means:</p>
+        <label><input type="radio" name="hw10" value="a"> to be very blunt</label><label><input type="radio" name="hw10" value="b"> to make bad news sound better</label><label><input type="radio" name="hw10" value="c"> to add detail</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <p class="section-note" style="margin-top:20px;">Free writing (write first, then record a voice note explaining it): Think of an upcoming conversation at work where you'll need to disagree with someone or deliver difficult news. Write out what you would say, using at least four phrases from this lesson.</p>
+        <textarea class="ta" data-keywords="might|could|suggest|perhaps|wonder|consider|reservations" style="min-height:140px;"></textarea>
+        <button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span>
+        <button class="reset-btn" onclick="resetSection('h-sec8')">Reset</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function showTab(tab){
+  const lessonPanel = document.getElementById('lesson');
+  const hwPanel = document.getElementById('homework');
+  const lessonBtn = document.querySelector('.tab-btn.lesson');
+  const hwBtn = document.querySelector('.tab-btn.homework');
+  if(tab === 'lesson'){
+    lessonPanel.classList.add('active');
+    hwPanel.classList.remove('active');
+    lessonBtn.classList.remove('inactive');
+    hwBtn.classList.add('inactive');
+  } else {
+    hwPanel.classList.add('active');
+    lessonPanel.classList.remove('active');
+    hwBtn.classList.remove('inactive');
+    lessonBtn.classList.add('inactive');
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggleAccordion(id){
+  document.getElementById(id).classList.toggle('open');
+}
+
+function normalize(str){
+  return str.toLowerCase().trim().replace(/[.,!?;:'"]/g,'').replace(/\s+/g,' ');
+}
+
+function checkBlank(btn){
+  const q = btn.closest('.q');
+  const input = q.querySelector('input.blank');
+  const feedback = q.querySelector('.feedback');
+  const accepted = input.getAttribute('data-answers').split('|').map(normalize);
+  const val = normalize(input.value);
+  if(accepted.includes(val)){
+    input.classList.remove('incorrect');
+    input.classList.add('correct');
+    feedback.textContent = 'Correct!';
+    feedback.className = 'feedback correct';
+  } else {
+    input.classList.remove('correct');
+    input.classList.add('incorrect');
+    feedback.textContent = 'Not quite — try again.';
+    feedback.className = 'feedback incorrect';
+  }
+}
+
+function checkTA(btn){
+  const q = btn.closest('.q');
+  const ta = q.querySelector('textarea.ta');
+  const feedback = q.querySelector('.feedback');
+  const keywords = ta.getAttribute('data-keywords').split('|').map(k => k.toLowerCase());
+  const val = ta.value.toLowerCase();
+  const found = keywords.some(k => val.includes(k));
+  if(val.trim().length < 5){
+    feedback.textContent = 'Write a full sentence first.';
+    feedback.className = 'feedback incorrect';
+  } else if(found){
+    feedback.textContent = 'Good — that includes appropriate hedging/diplomatic language.';
+    feedback.className = 'feedback correct';
+  } else {
+    feedback.textContent = 'Try including a modal of speculation or hedging phrase (might, could, perhaps, I\'d suggest...).';
+    feedback.className = 'feedback incorrect';
+  }
+}
+
+function checkMCQ(btn){
+  const q = btn.closest('.q');
+  const correct = q.getAttribute('data-correct');
+  const checked = q.querySelector('input[type="radio"]:checked');
+  const feedback = q.querySelector('.feedback');
+  if(!checked){
+    feedback.textContent = 'Please select an option.';
+    feedback.className = 'feedback incorrect';
+    return;
+  }
+  if(checked.value === correct){
+    feedback.textContent = 'Correct!';
+    feedback.className = 'feedback correct';
+  } else {
+    feedback.textContent = 'Not quite — try again.';
+    feedback.className = 'feedback incorrect';
+  }
+}
+
+function resetSection(id){
+  const section = document.getElementById(id);
+  section.querySelectorAll('input[type="text"]').forEach(i => { i.value=''; i.classList.remove('correct','incorrect'); });
+  section.querySelectorAll('textarea').forEach(t => t.value='');
+  section.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  section.querySelectorAll('.feedback').forEach(f => { f.textContent=''; f.className='feedback'; });
+}
+</script>
+
+</body>
+</html>
