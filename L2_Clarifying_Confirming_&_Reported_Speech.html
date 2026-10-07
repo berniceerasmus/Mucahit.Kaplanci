@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mücahit — Lesson 2: Clarifying, Confirming & Reported Speech</title>
+<style>
+  :root{
+    --bg:#F7F2E9;
+    --panel:#FFFDF9;
+    --panel-alt:#F1EAD9;
+    --ink:#2B2924;
+    --ink-muted:#6E6A5F;
+    --border:#DCD3BE;
+    --copper:#B5652F;
+    --copper-dark:#8F4E24;
+    --emerald:#1F6E54;
+    --emerald-dark:#154D3B;
+    --red:#B8392E;
+    --green:#1F6E54;
+    --shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-weight:600;
+    letter-spacing:0.2px;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:32px 20px 80px;}
+  header.top{
+    border-bottom:1px solid var(--border);
+    padding-bottom:22px;
+    margin-bottom:22px;
+  }
+  header.top h1{font-size:1.6rem;margin:0 0 6px;color:var(--ink);}
+  header.top .subtitle{color:var(--ink-muted);font-size:0.98rem;margin:0 0 16px;}
+  .orientation{
+    background:var(--panel);
+    border-left:3px solid var(--copper);
+    padding:14px 18px;
+    border-radius:4px;
+    color:var(--ink-muted);
+    font-size:0.95rem;
+  }
+  .tabbar{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+    gap:10px;
+  }
+  .tab-btn{
+    flex:1;
+    padding:12px 18px;
+    border-radius:6px;
+    border:none;
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:600;
+    font-family:inherit;
+    transition:filter .15s ease;
+  }
+  .tab-btn.lesson{background:var(--copper);color:#FFFDF9;}
+  .tab-btn.homework{background:var(--emerald);color:#FFFDF9;}
+  .tab-btn:hover{filter:brightness(1.08);}
+  .tab-btn.inactive{opacity:0.45;}
+  .panel{display:none;margin-top:24px;}
+  .panel.active{display:block;}
+  .insight{
+    background:linear-gradient(135deg, rgba(181,101,47,0.10), rgba(31,110,84,0.08));
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:26px;
+  }
+  .insight .label{
+    font-size:0.8rem;
+    color:var(--copper);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .insight p{margin:0;color:var(--ink);font-size:0.97rem;}
+  .accordion{
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:14px;
+    overflow:hidden;
+    background:var(--panel);
+  }
+  .accordion-header{
+    padding:16px 20px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:1.05rem;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-weight:600;
+    color:var(--ink);
+    user-select:none;
+  }
+  .accordion-header:hover{background:var(--panel-alt);}
+  .accordion-header .chevron{
+    color:var(--ink-muted);
+    transition:transform .2s ease;
+    font-size:0.85rem;
+  }
+  .accordion.open .chevron{transform:rotate(90deg);}
+  .accordion-body{
+    display:none;
+    padding:4px 20px 22px;
+    border-top:1px solid var(--border);
+  }
+  .accordion.open .accordion-body{display:block;}
+  .q{
+    background:var(--panel-alt);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:14px 16px;
+    margin:14px 0;
+  }
+  .q p{margin:0 0 10px;}
+  .q label{display:block;margin:6px 0;cursor:pointer;}
+  input[type="text"], textarea{
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    color:var(--ink);
+    border-radius:4px;
+    padding:8px 10px;
+    font-size:0.95rem;
+    font-family:inherit;
+    width:100%;
+    max-width:420px;
+  }
+  textarea{max-width:100%;min-height:80px;resize:vertical;}
+  input[type="text"].correct{border-color:var(--green);box-shadow:0 0 0 1px var(--green);}
+  input[type="text"].incorrect{border-color:var(--red);box-shadow:0 0 0 1px var(--red);}
+  .check-btn, .reset-btn{
+    margin-top:8px;
+    padding:7px 14px;
+    border-radius:5px;
+    border:none;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    font-family:inherit;
+  }
+  .check-btn{background:var(--copper);color:#FFFDF9;}
+  .reset-btn{background:transparent;border:1px solid var(--border);color:var(--ink-muted);float:right;}
+  .check-btn:hover{filter:brightness(1.1);}
+  .feedback{display:block;margin-top:8px;font-size:0.88rem;font-weight:600;}
+  .feedback.correct{color:var(--green);}
+  .feedback.incorrect{color:var(--red);}
+  .reading-passage{
+    background:var(--panel-alt);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:16px 18px;
+    font-size:0.96rem;
+    color:var(--ink);
+    margin-bottom:18px;
+  }
+  .vocab-list{list-style:none;padding:0;margin:0 0 18px;}
+  .vocab-list li{
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .vocab-list li b{color:var(--copper);}
+  .section-note{color:var(--ink-muted);font-size:0.88rem;font-style:italic;margin-top:-4px;margin-bottom:16px;}
+  .go-hw-btn{
+    display:inline-block;
+    margin-bottom:18px;
+    padding:8px 16px;
+    background:var(--emerald);
+    color:#FFFDF9;
+    border-radius:5px;
+    font-weight:600;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:none;
+  }
+  .grammar-box{
+    background:var(--panel-alt);
+    border-left:3px solid var(--emerald);
+    padding:14px 18px;
+    border-radius:4px;
+    margin-bottom:18px;
+    font-size:0.95rem;
+  }
+  .grammar-box code{color:var(--copper);font-family:inherit;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Clarifying, Confirming & Reported Speech</h1>
+    <p class="subtitle">Business English — Phase 1, Lesson 2 · Reported Speech & Indirect Questions</p>
+    <div class="orientation">
+      This lesson covers how to report what someone said and ask questions more politely — useful both in
+      business settings (reporting back a client's feedback, confirming meeting details) and everyday
+      conversation (retelling a story, asking a stranger for information). The <strong>Lesson</strong> tab
+      covers the grammar, vocabulary, and in-session practice; the <strong>Homework</strong> tab reinforces it
+      with a longer reading passage and extra practice, including a writing + voice note task.
+    </div>
+    <div class="tabbar">
+      <button class="tab-btn lesson" onclick="showTab('lesson')">Lesson</button>
+      <button class="tab-btn homework inactive" onclick="showTab('homework')">Homework</button>
+    </div>
+  </header>
+
+  <!-- ===================== LESSON TAB ===================== -->
+  <div id="lesson" class="panel active">
+
+    <div class="insight">
+      <div class="label">Business Insight</div>
+      <p>When you report back what a client or colleague said — in an email, a meeting recap, or casual
+      conversation — small reporting errors (tense, word order) can quietly change the meaning. "She said she
+      was happy" and "She says she's happy" carry different implications about timing and current feelings.
+      Getting reported speech right keeps your summaries accurate, in business and in daily life alike.</p>
+    </div>
+
+    <button class="go-hw-btn" onclick="showTab('homework')">Go to Homework →</button>
+
+    <!-- SECTION 1: GRAMMAR -->
+    <div class="accordion open" id="l-sec1">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec1')">1. Grammar — Reported Speech & Indirect Questions <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <div class="grammar-box">
+          <p><b>Reported statements:</b> the verb usually moves one step back in time.<br>
+          "I'm happy with the offer." → <code>She said (that) she was happy with the offer.</code><br>
+          "We will deliver on Friday." → <code>They said (that) they would deliver on Friday.</code></p>
+          <p><b>Reported questions:</b> word order becomes statement order, and the question mark disappears.<br>
+          "Where is the invoice?" → <code>He asked where the invoice was.</code><br>
+          "Did you send the contract?" → <code>She asked if/whether I had sent the contract.</code></p>
+          <p><b>Indirect questions</b> make a direct question sound more polite, often used with strangers or
+          senior colleagues: <code>Could you tell me what time the meeting starts?</code> instead of
+          <code>What time does the meeting start?</code></p>
+        </div>
+        <p class="section-note">Complete each sentence with the correct reported form.</p>
+
+        <div class="q"><p>1. "I need the report by Monday." → He said he <input type="text" class="blank" data-answers="needed"> the report by Monday.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. "We can't attend the call." → They said they <input type="text" class="blank" data-answers="couldn't attend|could not attend"> the call.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. "Where is the nearest pharmacy?" → She asked where the nearest pharmacy <input type="text" class="blank" data-answers="was"> .</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. "Did you check the figures?" → He asked <input type="text" class="blank" data-answers="if I had checked|whether I had checked"> the figures.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. Could you tell me <input type="text" class="blank" data-answers="what time|when"> the train leaves?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. "I will call you back." → She said she <input type="text" class="blank" data-answers="would call"> me back.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. "I have already sent the email." → He said he <input type="text" class="blank" data-answers="had already sent"> the email.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. Do you know <input type="text" class="blank" data-answers="where"> the conference room is?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. "Who approved this budget?" → She asked who <input type="text" class="blank" data-answers="had approved"> the budget.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. "Is the shipment ready?" → He asked <input type="text" class="blank" data-answers="if the shipment was|whether the shipment was"> ready.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec1')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: VOCABULARY -->
+    <div class="accordion" id="l-sec2">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec2')">2. Vocabulary — Clarifying & Following Up <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <ul class="vocab-list">
+          <li><b>to paraphrase</b> — to repeat something in different words</li>
+          <li><b>to clarify</b> — to make something clearer or less confusing</li>
+          <li><b>to recap</b> — to briefly summarize what was said</li>
+          <li><b>to follow up</b> — to continue or check on something later</li>
+          <li><b>to get back to someone</b> — to reply or respond at a later time</li>
+          <li><b>to touch base</b> — to make brief contact to check on progress</li>
+          <li><b>to loop someone in</b> — to include someone in a conversation or decision</li>
+          <li><b>to flag something</b> — to point out an issue so it gets attention</li>
+          <li><b>to circle back</b> — to return to a topic later in a discussion</li>
+          <li><b>to iron out (details)</b> — to resolve small remaining problems</li>
+        </ul>
+        <p class="section-note">Complete each sentence with the correct phrase.</p>
+        <div class="q"><p>1. Let's <input type="text" class="blank" data-answers="touch base"> next week to see how things are progressing.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. Could you <input type="text" class="blank" data-answers="clarify"> what you meant by "flexible pricing"?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. I'll <input type="text" class="blank" data-answers="get back to you"> once I've spoken to the finance team.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. I want to <input type="text" class="blank" data-answers="flag"> a possible issue with the delivery date.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. We still need to <input type="text" class="blank" data-answers="iron out"> a few details before signing.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. Can you <input type="text" class="blank" data-answers="loop in"> the legal team on this email?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. To <input type="text" class="blank" data-answers="recap"> , we agreed on a two-week trial period.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. Let me <input type="text" class="blank" data-answers="paraphrase"> to make sure I understood correctly.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. We'll <input type="text" class="blank" data-answers="circle back"> to the pricing question after lunch.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. I need to <input type="text" class="blank" data-answers="follow up"> with the supplier about the delay.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec2')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: PRACTICE A -->
+    <div class="accordion" id="l-sec3">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec3')">3. Practice A — Sentence Transformation <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Rewrite each direct quote as reported speech.</p>
+        <div class="q"><p>1. "I'll send the invoice tomorrow," she said. → <textarea class="ta" data-keywords="would send"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. "We have finished the pilot phase," he said. → <textarea class="ta" data-keywords="had finished"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. "Can you confirm the order?" she asked. → <textarea class="ta" data-keywords="if i could confirm|whether i could confirm"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. "Where did you send the samples?" he asked. → <textarea class="ta" data-keywords="where i had sent"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. "I'm not sure about the new policy," she said. → <textarea class="ta" data-keywords="was not sure|wasn't sure"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. "Did the shipment arrive?" he asked. → <textarea class="ta" data-keywords="if the shipment had arrived|whether the shipment had arrived"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. "I will not accept that price," the client said. → <textarea class="ta" data-keywords="would not accept"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. "What time does the office close?" she asked. → <textarea class="ta" data-keywords="what time the office closed"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. "I can't make the Thursday meeting," he said. → <textarea class="ta" data-keywords="could not make|couldn't make"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. "Have you spoken to the supplier?" she asked. → <textarea class="ta" data-keywords="if i had spoken|whether i had spoken"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec3')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: PRACTICE B -->
+    <div class="accordion" id="l-sec4">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec4')">4. Practice B — Error Correction <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Each sentence has one error. Type the corrected sentence.</p>
+        <div class="q"><p>1. He asked where is the invoice.</p><textarea class="ta" data-keywords="where the invoice was"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. She said that she will call back later.</p><textarea class="ta" data-keywords="she would call"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. He asked did I send the contract.</p><textarea class="ta" data-keywords="if i had sent|whether i had sent"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. Could you tell me where is the meeting room?</p><textarea class="ta" data-keywords="where the meeting room is"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. They said they have already shipped the order.</p><textarea class="ta" data-keywords="had already shipped"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. She asked if I can confirm the price.</p><textarea class="ta" data-keywords="if i could confirm"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. Do you know what time does the train leave?</p><textarea class="ta" data-keywords="what time the train leaves"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. He said he is happy with the offer, referring to last week.</p><textarea class="ta" data-keywords="he was happy"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. She asked who have approved the discount.</p><textarea class="ta" data-keywords="who had approved"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. Could you clarify what means this clause?</p><textarea class="ta" data-keywords="what this clause means"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('l-sec4')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: PRACTICE C -->
+    <div class="accordion" id="l-sec5">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec5')">5. Practice C — Multiple Choice <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Choose the correct reported or indirect form.</p>
+
+        <div class="q" data-correct="b"><p>1. Direct: "I need the files today." Reported:</p>
+        <label><input type="radio" name="mc1" value="a"> He said he needs the files today.</label>
+        <label><input type="radio" name="mc1" value="b"> He said he needed the files that day.</label>
+        <label><input type="radio" name="mc1" value="c"> He say he needed the files today.</label>
+        <label><input type="radio" name="mc1" value="d"> He said he need the files today.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>2. Polite way to ask a stranger where the station is:</p>
+        <label><input type="radio" name="mc2" value="a"> Where is the station?</label>
+        <label><input type="radio" name="mc2" value="b"> Tell me where is the station.</label>
+        <label><input type="radio" name="mc2" value="c"> Could you tell me where the station is?</label>
+        <label><input type="radio" name="mc2" value="d"> Where the station is?</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. Direct: "Did you sign the contract?" Reported:</p>
+        <label><input type="radio" name="mc3" value="a"> She asked if I had signed the contract.</label>
+        <label><input type="radio" name="mc3" value="b"> She asked did I sign the contract.</label>
+        <label><input type="radio" name="mc3" value="c"> She asked if did I sign the contract.</label>
+        <label><input type="radio" name="mc3" value="d"> She asked I signed the contract.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>4. Direct: "We will not reduce the price." Reported:</p>
+        <label><input type="radio" name="mc4" value="a"> They said they will not reduce the price.</label>
+        <label><input type="radio" name="mc4" value="b"> They said they don't reduce the price.</label>
+        <label><input type="radio" name="mc4" value="c"> They said they not reduce the price.</label>
+        <label><input type="radio" name="mc4" value="d"> They said they would not reduce the price.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>5. Which is correctly formed?</p>
+        <label><input type="radio" name="mc5" value="a"> He asked where was the manager.</label>
+        <label><input type="radio" name="mc5" value="b"> He asked where the manager was.</label>
+        <label><input type="radio" name="mc5" value="c"> He asked where is the manager.</label>
+        <label><input type="radio" name="mc5" value="d"> He asked where the manager is was.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>6. Direct: "I have already paid the deposit." Reported:</p>
+        <label><input type="radio" name="mc6" value="a"> She said she already pays the deposit.</label>
+        <label><input type="radio" name="mc6" value="b"> She said she has already paid the deposit.</label>
+        <label><input type="radio" name="mc6" value="c"> She said she had already paid the deposit.</label>
+        <label><input type="radio" name="mc6" value="d"> She said she already paid the deposit then.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. Most polite way to ask a senior colleague for the time of a call:</p>
+        <label><input type="radio" name="mc7" value="a"> Do you happen to know what time the call starts?</label>
+        <label><input type="radio" name="mc7" value="b"> What time call starts?</label>
+        <label><input type="radio" name="mc7" value="c"> Tell me the call time.</label>
+        <label><input type="radio" name="mc7" value="d"> When does start the call?</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>8. Direct: "Who approved this?" Reported:</p>
+        <label><input type="radio" name="mc8" value="a"> She asked who approve this.</label>
+        <label><input type="radio" name="mc8" value="b"> She asked who approves this.</label>
+        <label><input type="radio" name="mc8" value="c"> She asked who has approved this.</label>
+        <label><input type="radio" name="mc8" value="d"> She asked who had approved this.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>9. Which reports "Is the office open on Saturday?" correctly?</p>
+        <label><input type="radio" name="mc9" value="a"> He asked is the office open on Saturday.</label>
+        <label><input type="radio" name="mc9" value="b"> He asked if the office was open on Saturday.</label>
+        <label><input type="radio" name="mc9" value="c"> He asked the office was open on Saturday.</label>
+        <label><input type="radio" name="mc9" value="d"> He asked if is the office open on Saturday.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>10. Which is the most polite phrasing?</p>
+        <label><input type="radio" name="mc10" value="a"> What's your budget?</label>
+        <label><input type="radio" name="mc10" value="b"> Tell me your budget.</label>
+        <label><input type="radio" name="mc10" value="c"> Would you mind telling me what your budget is?</label>
+        <label><input type="radio" name="mc10" value="d"> Your budget is what?</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('l-sec5')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 6: READING & DISCUSSION -->
+    <div class="accordion" id="l-sec6">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec6')">6. Reading & Discussion <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <div class="reading-passage">
+          <p>After a long call with a distributor in Saudi Arabia, the sales manager sent a short recap email to
+          the rest of the team. He wrote that the distributor had said he was satisfied with the product quality,
+          but that he needed a faster delivery schedule. He also mentioned that the distributor had asked whether
+          the company could offer a consignment arrangement for the first three months. The manager said he
+          would get back to the distributor by Thursday with an answer, once he had checked with the logistics
+          team. Writing an accurate recap mattered here — if he had reported the wrong tense or missed a detail,
+          the rest of the team might have acted on the wrong information.</p>
+        </div>
+        <p class="section-note">Mark each statement as True (T), False (F), or Not Given (NG).</p>
+
+        <div class="q" data-correct="a"><p>1. The distributor is based in Saudi Arabia.</p>
+        <label><input type="radio" name="r1" value="a"> True</label><label><input type="radio" name="r1" value="b"> False</label><label><input type="radio" name="r1" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>2. The distributor was satisfied with the product quality.</p>
+        <label><input type="radio" name="r2" value="a"> True</label><label><input type="radio" name="r2" value="b"> False</label><label><input type="radio" name="r2" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>3. The distributor was happy with the current delivery schedule.</p>
+        <label><input type="radio" name="r3" value="a"> True</label><label><input type="radio" name="r3" value="b"> False</label><label><input type="radio" name="r3" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>4. The distributor asked about a consignment arrangement.</p>
+        <label><input type="radio" name="r4" value="a"> True</label><label><input type="radio" name="r4" value="b"> False</label><label><input type="radio" name="r4" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>5. The distributor had worked with the company for two years.</p>
+        <label><input type="radio" name="r5" value="a"> True</label><label><input type="radio" name="r5" value="b"> False</label><label><input type="radio" name="r5" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>6. The manager promised a reply by Thursday.</p>
+        <label><input type="radio" name="r6" value="a"> True</label><label><input type="radio" name="r6" value="b"> False</label><label><input type="radio" name="r6" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>7. The manager answered the distributor immediately, without checking anything.</p>
+        <label><input type="radio" name="r7" value="a"> True</label><label><input type="radio" name="r7" value="b"> False</label><label><input type="radio" name="r7" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>8. The manager needed to check with the logistics team.</p>
+        <label><input type="radio" name="r8" value="a"> True</label><label><input type="radio" name="r8" value="b"> False</label><label><input type="radio" name="r8" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>9. The call lasted over two hours.</p>
+        <label><input type="radio" name="r9" value="a"> True</label><label><input type="radio" name="r9" value="b"> False</label><label><input type="radio" name="r9" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>10. An inaccurate recap could have led the team to act on wrong information.</p>
+        <label><input type="radio" name="r10" value="a"> True</label><label><input type="radio" name="r10" value="b"> False</label><label><input type="radio" name="r10" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('l-sec6')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 7: SPEAKING -->
+    <div class="accordion" id="l-sec7">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec7')">7. Speaking <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Discuss these in the lesson, using reported speech or an indirect question in each answer.</p>
+        <ol>
+          <li>Tell me about a recent call or meeting — report back what someone said, using reported speech.</li>
+          <li>How do you usually confirm details with an international client after a call?</li>
+          <li>Describe a time a miscommunication happened because something was reported inaccurately.</li>
+          <li>How would you politely ask a senior director a question you're nervous about?</li>
+          <li>Tell me about a time you had to "iron out details" before closing a deal.</li>
+          <li>What's a situation at work where you often need to "loop someone in"?</li>
+          <li>How do you usually "recap" a meeting for people who weren't there?</li>
+          <li>Describe a time you had to flag a concern to a manager — what did you say?</li>
+          <li>What's the difference, for you, between asking something directly versus indirectly in English?</li>
+          <li>Tell me about a conversation outside work (friends, family) where you reported what someone said.</li>
+        </ol>
+        <button class="reset-btn" onclick="resetSection('l-sec7')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 8: WRAP-UP -->
+    <div class="accordion" id="l-sec8">
+      <div class="accordion-header" onclick="toggleAccordion('l-sec8')">8. Wrap-Up & Free Writing <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Quick recap — choose the correct option.</p>
+        <div class="q" data-correct="b"><p>1. "I am ready" reported becomes:</p>
+        <label><input type="radio" name="w1" value="a"> He said he is ready.</label><label><input type="radio" name="w1" value="b"> He said he was ready.</label><label><input type="radio" name="w1" value="c"> He say he was ready.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>2. Reported questions use:</p>
+        <label><input type="radio" name="w2" value="a"> question word order</label><label><input type="radio" name="w2" value="b"> a question mark</label><label><input type="radio" name="w2" value="c"> statement word order</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. "To touch base" means:</p>
+        <label><input type="radio" name="w3" value="a"> to make brief contact to check progress</label><label><input type="radio" name="w3" value="b"> to end a project</label><label><input type="radio" name="w3" value="c"> to disagree</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>4. "To loop someone in" means:</p>
+        <label><input type="radio" name="w4" value="a"> to exclude someone</label><label><input type="radio" name="w4" value="b"> to include someone in a discussion</label><label><input type="radio" name="w4" value="c"> to repeat something</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>5. "Did you call her?" reported with "ask" becomes:</p>
+        <label><input type="radio" name="w5" value="a"> He asked did I call her.</label><label><input type="radio" name="w5" value="b"> He asked I called her.</label><label><input type="radio" name="w5" value="c"> He asked if I had called her.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>6. "To iron out details" means:</p>
+        <label><input type="radio" name="w6" value="a"> to resolve small remaining problems</label><label><input type="radio" name="w6" value="b"> to create new problems</label><label><input type="radio" name="w6" value="c"> to cancel a plan</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>7. Indirect questions are mainly used to:</p>
+        <label><input type="radio" name="w7" value="a"> sound less clear</label><label><input type="radio" name="w7" value="b"> sound more polite</label><label><input type="radio" name="w7" value="c"> ask faster</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>8. "To flag something" means:</p>
+        <label><input type="radio" name="w8" value="a"> to ignore an issue</label><label><input type="radio" name="w8" value="b"> to celebrate something</label><label><input type="radio" name="w8" value="c"> to point out an issue for attention</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>9. "I will send it" reported becomes:</p>
+        <label><input type="radio" name="w9" value="a"> She said she would send it.</label><label><input type="radio" name="w9" value="b"> She said she will send it.</label><label><input type="radio" name="w9" value="c"> She said she sends it.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>10. "To circle back" means:</p>
+        <label><input type="radio" name="w10" value="a"> to avoid a topic permanently</label><label><input type="radio" name="w10" value="b"> to return to a topic later</label><label><input type="radio" name="w10" value="c"> to end a meeting</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <p class="section-note" style="margin-top:20px;">Free writing: Write a short recap of a recent conversation (real or imagined) using reported speech, as if summarizing it for a colleague who missed it.</p>
+        <textarea class="ta" data-keywords="said|told|asked|would|had" style="min-height:120px;"></textarea>
+        <button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span>
+        <button class="reset-btn" onclick="resetSection('l-sec8')">Reset</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== HOMEWORK TAB ===================== -->
+  <div id="homework" class="panel">
+
+    <!-- SECTION 1: GRAMMAR -->
+    <div class="accordion open" id="h-sec1">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec1')">1. Grammar — Reported Speech & Indirect Questions <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">More practice with reported speech and indirect questions.</p>
+        <div class="q"><p>1. "I am traveling to Dubai next week." → He said he <input type="text" class="blank" data-answers="was traveling"> to Dubai the following week.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. "We have decided to postpone the launch." → They said they <input type="text" class="blank" data-answers="had decided"> to postpone the launch.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. "Where do you keep the records?" → She asked where I <input type="text" class="blank" data-answers="kept"> the records.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. "Can you attend the call tomorrow?" → He asked <input type="text" class="blank" data-answers="if I could attend|whether I could attend"> the call the next day.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. Do you know <input type="text" class="blank" data-answers="when"> the flight departs?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. "I won't be able to make it." → He said he <input type="text" class="blank" data-answers="wouldn't be able|would not be able"> to make it.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. "I've never seen this clause before." → She said she <input type="text" class="blank" data-answers="had never seen"> that clause before.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. Could you tell me <input type="text" class="blank" data-answers="how much"> the shipment costs?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. "Who signed off on this?" → He asked who <input type="text" class="blank" data-answers="had signed"> off on it.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. "Is the order confirmed?" → She asked <input type="text" class="blank" data-answers="if the order was|whether the order was"> confirmed.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec1')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: VOCABULARY -->
+    <div class="accordion" id="h-sec2">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec2')">2. Vocabulary — Clarifying & Following Up <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Use each term from Lesson Section 2 correctly.</p>
+        <div class="q"><p>1. I'll <input type="text" class="blank" data-answers="follow up"> with him after the holidays.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. Could you <input type="text" class="blank" data-answers="paraphrase"> that in simpler terms?</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. We need to <input type="text" class="blank" data-answers="touch base"> before the client call tomorrow.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. Let's <input type="text" class="blank" data-answers="recap"> the main points before we close the meeting.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. I'd like to <input type="text" class="blank" data-answers="flag"> a concern about the payment terms.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. Please <input type="text" class="blank" data-answers="loop in"> the regional manager on this decision.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. We can <input type="text" class="blank" data-answers="circle back"> to the budget discussion tomorrow.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. I need you to <input type="text" class="blank" data-answers="clarify"> the delivery terms before I sign.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. There are still a few things to <input type="text" class="blank" data-answers="iron out"> before the contract is final.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. I'll <input type="text" class="blank" data-answers="get back to you"> by end of day with an answer.</p><button class="check-btn" onclick="checkBlank(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec2')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: PRACTICE A -->
+    <div class="accordion" id="h-sec3">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec3')">3. Practice A — Sentence Transformation <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Rewrite each direct quote as reported speech.</p>
+        <div class="q"><p>1. "I'm going to call the supplier now," she said. → <textarea class="ta" data-keywords="was going to call"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. "We haven't received the payment yet," he said. → <textarea class="ta" data-keywords="had not received|hadn't received"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. "Will you be at the conference?" she asked. → <textarea class="ta" data-keywords="if i would be|whether i would be"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. "Why did the order get delayed?" he asked. → <textarea class="ta" data-keywords="why the order had got delayed|why the order got delayed"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. "I don't agree with the new terms," she said. → <textarea class="ta" data-keywords="did not agree|didn't agree"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. "Has the client replied yet?" he asked. → <textarea class="ta" data-keywords="if the client had replied|whether the client had replied"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. "I will not sign without legal review," the director said. → <textarea class="ta" data-keywords="would not sign"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. "How long will the repair take?" she asked. → <textarea class="ta" data-keywords="how long the repair would take"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. "I can't find the original invoice," he said. → <textarea class="ta" data-keywords="could not find|couldn't find"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. "Did the team finish the audit?" she asked. → <textarea class="ta" data-keywords="if the team had finished|whether the team had finished"></textarea></p><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec3')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: PRACTICE B -->
+    <div class="accordion" id="h-sec4">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec4')">4. Practice B — Error Correction <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Correct the error in each sentence.</p>
+        <div class="q"><p>1. He asked why is the shipment delayed.</p><textarea class="ta" data-keywords="why the shipment was delayed"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>2. She said she will finish it by Friday.</p><textarea class="ta" data-keywords="she would finish"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>3. He asked does she agree with the plan.</p><textarea class="ta" data-keywords="if she agreed|whether she agreed"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>4. Could you tell me how much does it cost?</p><textarea class="ta" data-keywords="how much it costs"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>5. They said they have finished the review already.</p><textarea class="ta" data-keywords="had already finished|had finished already"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>6. She asked if can I call her tomorrow.</p><textarea class="ta" data-keywords="if i could call"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>7. Do you know what time does the office open?</p><textarea class="ta" data-keywords="what time the office opens"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>8. He said he is in a meeting, referring to last Tuesday.</p><textarea class="ta" data-keywords="he was in a meeting"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>9. She asked who have signed the agreement.</p><textarea class="ta" data-keywords="who had signed"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <div class="q"><p>10. Could you clarify what covers this warranty?</p><textarea class="ta" data-keywords="what this warranty covers"></textarea><button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span></div>
+        <button class="reset-btn" onclick="resetSection('h-sec4')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: PRACTICE C -->
+    <div class="accordion" id="h-sec5">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec5')">5. Practice C — Multiple Choice <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Choose the correct reported or indirect form.</p>
+
+        <div class="q" data-correct="c"><p>1. Direct: "I can't reach the client." Reported:</p>
+        <label><input type="radio" name="hm1" value="a"> She said she can't reach the client.</label>
+        <label><input type="radio" name="hm1" value="b"> She said she not reach the client.</label>
+        <label><input type="radio" name="hm1" value="c"> She said she couldn't reach the client.</label>
+        <label><input type="radio" name="hm1" value="d"> She say she couldn't reach the client.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>2. Polite way to ask a colleague for the Wi-Fi password:</p>
+        <label><input type="radio" name="hm2" value="a"> What's the Wi-Fi password?</label>
+        <label><input type="radio" name="hm2" value="b"> Would you happen to know the Wi-Fi password?</label>
+        <label><input type="radio" name="hm2" value="c"> Tell me the password now.</label>
+        <label><input type="radio" name="hm2" value="d"> Password, please.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. Direct: "Have you reviewed the draft?" Reported:</p>
+        <label><input type="radio" name="hm3" value="a"> He asked if I had reviewed the draft.</label>
+        <label><input type="radio" name="hm3" value="b"> He asked have I reviewed the draft.</label>
+        <label><input type="radio" name="hm3" value="c"> He asked did I review the draft yet.</label>
+        <label><input type="radio" name="hm3" value="d"> He asked I reviewed the draft.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>4. Direct: "We will upgrade the system next year." Reported:</p>
+        <label><input type="radio" name="hm4" value="a"> They said they will upgrade the system next year.</label>
+        <label><input type="radio" name="hm4" value="b"> They said they upgrade the system next year.</label>
+        <label><input type="radio" name="hm4" value="c"> They said they upgraded the system next year.</label>
+        <label><input type="radio" name="hm4" value="d"> They said they would upgrade the system the following year.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>5. Which is correctly formed?</p>
+        <label><input type="radio" name="hm5" value="a"> She asked how much costs the device.</label>
+        <label><input type="radio" name="hm5" value="b"> She asked how much the device costs.</label>
+        <label><input type="radio" name="hm5" value="c"> She asked how much does the device cost.</label>
+        <label><input type="radio" name="hm5" value="d"> She asked the device how much costs.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>6. Direct: "I had already left when you called." Reported:</p>
+        <label><input type="radio" name="hm6" value="a"> He said he already leaves when you called.</label>
+        <label><input type="radio" name="hm6" value="b"> He said he has already left when I called.</label>
+        <label><input type="radio" name="hm6" value="c"> He said he had already left when I called.</label>
+        <label><input type="radio" name="hm6" value="d"> He said he already left then.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. Most polite way to ask an unfamiliar client about their budget range:</p>
+        <label><input type="radio" name="hm7" value="a"> Could you give me a sense of your budget range?</label>
+        <label><input type="radio" name="hm7" value="b"> What's your budget?</label>
+        <label><input type="radio" name="hm7" value="c"> Tell me your budget now.</label>
+        <label><input type="radio" name="hm7" value="d"> How much money do you have?</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="d"><p>8. Direct: "What caused the delay?" Reported:</p>
+        <label><input type="radio" name="hm8" value="a"> He asked what causes the delay.</label>
+        <label><input type="radio" name="hm8" value="b"> He asked what caused the delay now.</label>
+        <label><input type="radio" name="hm8" value="c"> He asked what has caused the delay.</label>
+        <label><input type="radio" name="hm8" value="d"> He asked what had caused the delay.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>9. Which reports "Is the invoice paid?" correctly?</p>
+        <label><input type="radio" name="hm9" value="a"> She asked is the invoice paid.</label>
+        <label><input type="radio" name="hm9" value="b"> She asked if the invoice was paid.</label>
+        <label><input type="radio" name="hm9" value="c"> She asked the invoice was paid.</label>
+        <label><input type="radio" name="hm9" value="d"> She asked if is the invoice paid.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>10. Which is the most diplomatic and polite phrasing?</p>
+        <label><input type="radio" name="hm10" value="a"> Why haven't you replied yet?</label>
+        <label><input type="radio" name="hm10" value="b"> Reply now, please.</label>
+        <label><input type="radio" name="hm10" value="c"> I was wondering if you'd had a chance to reply yet?</label>
+        <label><input type="radio" name="hm10" value="d"> You didn't reply.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('h-sec5')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 6: READING & DISCUSSION -->
+    <div class="accordion" id="h-sec6">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec6')">6. Reading & Discussion <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <div class="reading-passage">
+          <p>A miscommunication once cost a sales team almost a week of lost progress. During a call with a
+          distributor in South Africa, the distributor said he was "fairly confident" the board would approve
+          the new contract terms, but added that he would need to confirm by email. The sales rep who took the
+          call reported back to the team that the deal was "basically done." Based on that recap, the operations
+          team began preparing shipment documents and blocking warehouse space for the order. Three days later,
+          the distributor's email arrived — the board had, in fact, asked for a lower minimum order quantity
+          before approving anything. The operations team had to undo several days of preparation, and the sales
+          rep had to explain to the regional director what had gone wrong. Afterward, the team introduced a
+          simple rule: any recap of a call involving a decision had to include the exact words used, not just
+          the reporter's impression of what they meant — so "fairly confident, pending board approval" would be
+          reported as exactly that, rather than rounded up to "done." The rule seemed small, but it prevented at
+          least two similar mix-ups in the following months, and the team began treating accurate reporting as
+          seriously as the negotiation itself.</p>
+        </div>
+        <p class="section-note">Mark each statement as True (T), False (F), or Not Given (NG).</p>
+
+        <div class="q" data-correct="a"><p>1. The call was with a distributor in South Africa.</p>
+        <label><input type="radio" name="hr1" value="a"> True</label><label><input type="radio" name="hr1" value="b"> False</label><label><input type="radio" name="hr1" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>2. The distributor confirmed the deal was fully approved during the call.</p>
+        <label><input type="radio" name="hr2" value="a"> True</label><label><input type="radio" name="hr2" value="b"> False</label><label><input type="radio" name="hr2" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>3. The sales rep reported the deal as "basically done."</p>
+        <label><input type="radio" name="hr3" value="a"> True</label><label><input type="radio" name="hr3" value="b"> False</label><label><input type="radio" name="hr3" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>4. The operations team began preparing shipment documents based on that recap.</p>
+        <label><input type="radio" name="hr4" value="a"> True</label><label><input type="radio" name="hr4" value="b"> False</label><label><input type="radio" name="hr4" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>5. The board approved the contract exactly as originally proposed.</p>
+        <label><input type="radio" name="hr5" value="a"> True</label><label><input type="radio" name="hr5" value="b"> False</label><label><input type="radio" name="hr5" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>6. The distributor had worked with the company for over ten years.</p>
+        <label><input type="radio" name="hr6" value="a"> True</label><label><input type="radio" name="hr6" value="b"> False</label><label><input type="radio" name="hr6" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>7. The team introduced a rule requiring exact wording in recaps involving decisions.</p>
+        <label><input type="radio" name="hr7" value="a"> True</label><label><input type="radio" name="hr7" value="b"> False</label><label><input type="radio" name="hr7" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>8. The new rule had no effect on future mix-ups.</p>
+        <label><input type="radio" name="hr8" value="a"> True</label><label><input type="radio" name="hr8" value="b"> False</label><label><input type="radio" name="hr8" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>9. The sales rep had to explain the situation to the regional director.</p>
+        <label><input type="radio" name="hr9" value="a"> True</label><label><input type="radio" name="hr9" value="b"> False</label><label><input type="radio" name="hr9" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>10. The warehouse space issue was resolved the same day.</p>
+        <label><input type="radio" name="hr10" value="a"> True</label><label><input type="radio" name="hr10" value="b"> False</label><label><input type="radio" name="hr10" value="c"> Not Given</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <button class="reset-btn" onclick="resetSection('h-sec6')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 7: SPEAKING / WRITING + VOICE NOTE -->
+    <div class="accordion" id="h-sec7">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec7')">7. Speaking <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Write short answers first, then record a voice note (e.g. via WhatsApp) explaining what you wrote, in your own words, using reported speech or an indirect question in each answer.</p>
+        <ol>
+          <li>Describe a time a recap or summary of a conversation turned out to be inaccurate, similar to the reading.</li>
+          <li>How do you make sure your own recaps of calls are accurate?</li>
+          <li>Tell me about a time you had to politely ask a difficult question to someone senior.</li>
+          <li>What's a situation at work where you often need to "circle back" to something?</li>
+          <li>Report back something a friend or family member told you recently, using reported speech.</li>
+          <li>How would you flag a concern about a colleague's report without sounding critical?</li>
+          <li>Describe a situation where getting the exact wording right really mattered.</li>
+          <li>What's one indirect question you could start using more often at work?</li>
+          <li>Tell me about a time "touching base" with someone prevented a bigger problem.</li>
+          <li>How do you usually loop in other departments on an important decision?</li>
+        </ol>
+        <button class="reset-btn" onclick="resetSection('h-sec7')">Reset</button>
+      </div>
+    </div>
+
+    <!-- SECTION 8: WRAP-UP / FREE WRITING -->
+    <div class="accordion" id="h-sec8">
+      <div class="accordion-header" onclick="toggleAccordion('h-sec8')">8. Wrap-Up & Free Writing <span class="chevron">▶</span></div>
+      <div class="accordion-body">
+        <p class="section-note">Quick review — choose the correct option.</p>
+        <div class="q" data-correct="c"><p>1. "I am busy" reported becomes:</p>
+        <label><input type="radio" name="hw1" value="a"> He said he is busy.</label><label><input type="radio" name="hw1" value="b"> He say he was busy.</label><label><input type="radio" name="hw1" value="c"> He said he was busy.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>2. "To get back to someone" means:</p>
+        <label><input type="radio" name="hw2" value="a"> to reply later</label><label><input type="radio" name="hw2" value="b"> to return physically</label><label><input type="radio" name="hw2" value="c"> to apologize</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>3. Reported questions never keep:</p>
+        <label><input type="radio" name="hw3" value="a"> the original tense</label><label><input type="radio" name="hw3" value="b"> the question mark</label><label><input type="radio" name="hw3" value="c"> the main verb</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>4. "To iron out" means:</p>
+        <label><input type="radio" name="hw4" value="a"> to press clothing</label><label><input type="radio" name="hw4" value="b"> to avoid a topic</label><label><input type="radio" name="hw4" value="c"> to resolve remaining problems</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>5. "Did she call?" reported with "ask" becomes:</p>
+        <label><input type="radio" name="hw5" value="a"> He asked if she had called.</label><label><input type="radio" name="hw5" value="b"> He asked did she call.</label><label><input type="radio" name="hw5" value="c"> He asked she called.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>6. Indirect questions are especially useful with:</p>
+        <label><input type="radio" name="hw6" value="a"> close friends only</label><label><input type="radio" name="hw6" value="b"> strangers or senior colleagues</label><label><input type="radio" name="hw6" value="c"> children</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>7. "To flag" something means to:</p>
+        <label><input type="radio" name="hw7" value="a"> celebrate it</label><label><input type="radio" name="hw7" value="b"> hide it</label><label><input type="radio" name="hw7" value="c"> point it out for attention</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="a"><p>8. "I will not be late" reported becomes:</p>
+        <label><input type="radio" name="hw8" value="a"> She said she would not be late.</label><label><input type="radio" name="hw8" value="b"> She said she will not be late.</label><label><input type="radio" name="hw8" value="c"> She said she not be late.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="b"><p>9. Why does accurate reported speech matter in business?</p>
+        <label><input type="radio" name="hw9" value="a"> It sounds more formal.</label><label><input type="radio" name="hw9" value="b"> Inaccurate recaps can lead others to act on wrong information.</label><label><input type="radio" name="hw9" value="c"> It's required by law.</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <div class="q" data-correct="c"><p>10. "To touch base" means:</p>
+        <label><input type="radio" name="hw10" value="a"> to finish a project</label><label><input type="radio" name="hw10" value="b"> to disagree with someone</label><label><input type="radio" name="hw10" value="c"> to make brief contact and check progress</label>
+        <button class="check-btn" onclick="checkMCQ(this)">Check</button><span class="feedback"></span></div>
+
+        <p class="section-note" style="margin-top:20px;">Free writing (write first, then record a voice note explaining it): Write a recap of an important work conversation you had recently, as if you were updating a colleague who missed it. Use reported speech accurately throughout.</p>
+        <textarea class="ta" data-keywords="said|told|asked|would|had" style="min-height:140px;"></textarea>
+        <button class="check-btn" onclick="checkTA(this)">Check</button><span class="feedback"></span>
+        <button class="reset-btn" onclick="resetSection('h-sec8')">Reset</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function showTab(tab){
+  const lessonPanel = document.getElementById('lesson');
+  const hwPanel = document.getElementById('homework');
+  const lessonBtn = document.querySelector('.tab-btn.lesson');
+  const hwBtn = document.querySelector('.tab-btn.homework');
+  if(tab === 'lesson'){
+    lessonPanel.classList.add('active');
+    hwPanel.classList.remove('active');
+    lessonBtn.classList.remove('inactive');
+    hwBtn.classList.add('inactive');
+  } else {
+    hwPanel.classList.add('active');
+    lessonPanel.classList.remove('active');
+    hwBtn.classList.remove('inactive');
+    lessonBtn.classList.add('inactive');
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggleAccordion(id){
+  document.getElementById(id).classList.toggle('open');
+}
+
+function normalize(str){
+  return str.toLowerCase().trim().replace(/[.,!?;:'"]/g,'').replace(/\s+/g,' ');
+}
+
+function checkBlank(btn){
+  const q = btn.closest('.q');
+  const input = q.querySelector('input.blank');
+  const feedback = q.querySelector('.feedback');
+  const accepted = input.getAttribute('data-answers').split('|').map(normalize);
+  const val = normalize(input.value);
+  if(accepted.includes(val)){
+    input.classList.remove('incorrect');
+    input.classList.add('correct');
+    feedback.textContent = 'Correct!';
+    feedback.className = 'feedback correct';
+  } else {
+    input.classList.remove('correct');
+    input.classList.add('incorrect');
+    feedback.textContent = 'Not quite — try again.';
+    feedback.className = 'feedback incorrect';
+  }
+}
+
+function checkTA(btn){
+  const q = btn.closest('.q');
+  const ta = q.querySelector('textarea.ta');
+  const feedback = q.querySelector('.feedback');
+  const keywords = ta.getAttribute('data-keywords').split('|').map(k => k.toLowerCase());
+  const val = ta.value.toLowerCase();
+  const found = keywords.some(k => val.includes(k));
+  if(val.trim().length < 5){
+    feedback.textContent = 'Write a full sentence first.';
+    feedback.className = 'feedback incorrect';
+  } else if(found){
+    feedback.textContent = 'Good — that includes the correct reported form/language.';
+    feedback.className = 'feedback correct';
+  } else {
+    feedback.textContent = 'Check your tense and word order, then try again.';
+    feedback.className = 'feedback incorrect';
+  }
+}
+
+function checkMCQ(btn){
+  const q = btn.closest('.q');
+  const correct = q.getAttribute('data-correct');
+  const checked = q.querySelector('input[type="radio"]:checked');
+  const feedback = q.querySelector('.feedback');
+  if(!checked){
+    feedback.textContent = 'Please select an option.';
+    feedback.className = 'feedback incorrect';
+    return;
+  }
+  if(checked.value === correct){
+    feedback.textContent = 'Correct!';
+    feedback.className = 'feedback correct';
+  } else {
+    feedback.textContent = 'Not quite — try again.';
+    feedback.className = 'feedback incorrect';
+  }
+}
+
+function resetSection(id){
+  const section = document.getElementById(id);
+  section.querySelectorAll('input[type="text"]').forEach(i => { i.value=''; i.classList.remove('correct','incorrect'); });
+  section.querySelectorAll('textarea').forEach(t => t.value='');
+  section.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  section.querySelectorAll('.feedback').forEach(f => { f.textContent=''; f.className='feedback'; });
+}
+</script>
+
+</body>
+</html>
